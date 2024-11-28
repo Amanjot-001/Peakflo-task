@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid2';
 import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useDroppable } from '@dnd-kit/core';
 
 import Task from './Task';
 import AddTaskDialog from './AddTaskDialog';
@@ -21,6 +22,10 @@ const Board: React.FC<BoardProps> = ({ status, tasks }) => {
 	const [openAddDialog, setOpenAddDialog] = useState(false);
 	const [openRenameDialog, setOpenRenameDialog] = useState(false);
 
+	const { setNodeRef } = useDroppable({
+		id: status,
+	});
+
 	const handleAddTaskClick = () => {
 		setOpenAddDialog(true);
 	};
@@ -31,10 +36,10 @@ const Board: React.FC<BoardProps> = ({ status, tasks }) => {
 
 	return (
 		<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
-			<Card sx={{ width: 1, boxShadow: 'none' }}>
+			<Card sx={{ width: 1, boxShadow: 'none' }} ref={setNodeRef}>
 				<CardHeader
 					title={
-						<Box sx={{ display: "flex", flexDirection: "row", gap: 3, alignItems: 'center' }}>
+						<Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, alignItems: 'center' }}>
 							<Typography sx={{ padding: 0.5, bgcolor: '#FBF8E6', borderRadius: 2 }}>{status}</Typography>
 							<Typography sx={{ fontWeight: 100, color: '#888' }}>{tasks.length}</Typography>
 						</Box>
