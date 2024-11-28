@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { TaskType } from '../types/types';
 import { loadTasksFromLocalStorage, saveTasksToLocalStorage } from '../utils/localStorage';
 
@@ -11,6 +11,8 @@ const TaskDetailsPage = () => {
 	const [task, setTask] = useState<TaskType | null>(null);
 	const [title, setTitle] = useState<string>('');
 	const [description, setDescription] = useState<string>('');
+	const [status, setStatus] = useState<string>('');
+	const [newStatus, setNewStatus] = useState<string>('');
 
 	useEffect(() => {
 		const tasks = loadTasksFromLocalStorage();
@@ -19,6 +21,7 @@ const TaskDetailsPage = () => {
 			setTask(taskToEdit);
 			setTitle(taskToEdit.title);
 			setDescription(taskToEdit.description);
+			setStatus(taskToEdit.status); // Set current task's status
 		}
 	}, [taskId]);
 
@@ -26,7 +29,7 @@ const TaskDetailsPage = () => {
 		if (task) {
 			const tasks = loadTasksFromLocalStorage();
 			const updatedTasks = tasks.map((t) =>
-				t.id === task.id ? { ...t, title, description } : t
+				t.id === task.id ? { ...t, title, description, status: status || newStatus } : t
 			);
 			saveTasksToLocalStorage(updatedTasks);
 			navigate('/');
@@ -39,6 +42,15 @@ const TaskDetailsPage = () => {
 			const updatedTasks = tasks.filter((t) => t.id !== task.id);
 			saveTasksToLocalStorage(updatedTasks);
 			navigate('/');
+		}
+	};
+
+	// Handle status change (either from select or new status input)
+	const handleStatusChange = (e: any) => {
+		if (e.target.value === 'new') {
+			setStatus('');
+		} else {
+			setStatus(e.target.value);
 		}
 	};
 
@@ -63,6 +75,34 @@ const TaskDetailsPage = () => {
 						onChange={(e) => setDescription(e.target.value)}
 						sx={{ marginBottom: 2 }}
 					/>
+
+					<FormControl fullWidth sx={{ marginBottom: 2 }}>
+						<InputLabel id="status-select-label">Status</InputLabel>
+						<Select
+							labelId="status-select-label"
+							value={status || 'new'}
+							onChange={handleStatusChange}
+							label="Status"
+						>
+							<MenuItem value="new">Create New Status</MenuItem>
+							<MenuItem value="Not Started">Not Started</MenuItem>
+							<MenuItem value="In Progress">In Progress</MenuItem>
+							<MenuItem value="Completed">Completed</MenuItem>
+							{/* Add more predefined statuses here */}
+						</Select>
+					</FormControl>
+
+					{status === '' && (
+						<TextField
+							label="New Status"
+							variant="outlined"
+							fullWidth
+							value={newStatus}
+							onChange={(e) => setNewStatus(e.target.value)}
+							sx={{ marginBottom: 2 }}
+						/>
+					)}
+
 					<Box sx={{ display: 'flex', gap: 2 }}>
 						<Button variant="contained" onClick={handleSave}>
 							Save
