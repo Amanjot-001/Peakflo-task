@@ -63,12 +63,12 @@ function App() {
 	};
 
 	const handleDragStart = (event: DragStartEvent) => {
-		setActiveId(event.active.id);
+		setActiveId(String(event.active.id));
 	};
 
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event;
-		setActiveId(null); // Reset active id on drag end
+		setActiveId(null);
 
 		if (over && active.id !== over.id) {
 			const updatedTasks = [...tasks];
