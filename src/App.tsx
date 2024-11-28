@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 
 import Board from './components/Board';
 import TaskDetailsPage from './pages/TaskDetail'; // Import TaskDetailsPage
-import { DndContext, DragEndEvent, DragOverlay, useDraggable } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 
 function App() {
 	const [tasks, setTasks] = useState<TaskType[]>([]);
@@ -63,7 +63,7 @@ function App() {
 	};
 
 	const handleDragStart = (event: DragStartEvent) => {
-		setActiveId(event.active.id); // Set active id on drag start
+		setActiveId(event.active.id);
 	};
 
 	const handleDragEnd = (event: DragEndEvent) => {
