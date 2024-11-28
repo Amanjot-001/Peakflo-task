@@ -14,7 +14,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
 			<Link to={`/task/${task.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
 				<CardContent sx={{ display: 'flex', alignItems: 'center', '&:last-child': { paddingBottom: 1 }, padding: 1, margin: 0 }}>
 					<Typography variant="h6" fontWeight={800} sx={{ padding: 0, margin: 0, lineHeight: 1 }}>
-						{task.title}
+						{task.title != "" && task.title}
 					</Typography>
 				</CardContent>
 			</Link>
